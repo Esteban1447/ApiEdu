@@ -1,7 +1,7 @@
 package com.example.APIClassRoom.controllers;
 
 import com.example.APIClassRoom.models.Inscription;
-import com.example.APIClassRoom.services.InscriptionService;
+import com.example.APIClassRoom.services.TuitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class InscriptionController {
 
     @Autowired
-    InscriptionService service;
+    TuitionService service;
 
     @PostMapping()
     public ResponseEntity<?> save(@RequestBody Inscription inscriptionData) {

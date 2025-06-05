@@ -18,8 +18,11 @@ public class User {
 
     @Column(name = "email", unique = true)
     private String email;
+
     private String password;
+
     private String phone;
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
