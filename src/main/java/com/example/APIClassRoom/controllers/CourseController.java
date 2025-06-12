@@ -14,61 +14,67 @@ public class CourseController {
     @Autowired
     CourseService service;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> save(@RequestBody Course courseData) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.service.saveCourse(courseData));
-        } catch(Exception errorAPI) {
+                    .body(service.saveCourse(courseData));
+        } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());
         }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> modify(@PathVariable Integer id, @RequestBody Course data) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.service.modifyCourse(id, data));
-        } catch(Exception errorAPI) {
+                    .body(service.modifyCourse(id, data));
+        } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());
         }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> searchById(@PathVariable Integer id) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.service.searchCourseById(id));
-        } catch(Exception errorAPI) {
+                    .body(service.searchCourseById(id));
+        } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());
         }
     }
-    @GetMapping()
-    public ResponseEntity<?> searchAll() {
+
+    @GetMapping
+    public ResponseEntity<?> searchAll(@RequestParam(required = false) Integer teacherId) {
         try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(this.service.searchAllCourses());
-        } catch(Exception errorAPI) {
+            if (teacherId != null) {
+                return ResponseEntity.ok(service.getCoursesByTeacherId(teacherId));
+            } else {
+                return ResponseEntity.ok(service.searchAllCourses());
+            }
+        } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.service.deleteCourse(id));
-        } catch(Exception errorAPI) {
+                    .body(service.deleteCourse(id));
+        } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());

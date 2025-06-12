@@ -1,7 +1,9 @@
 package com.example.APIClassRoom.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -14,27 +16,35 @@ public class Grade {
 
     @ManyToOne
     @JoinColumn(name = "id_student", nullable = false)
+    @JsonIgnoreProperties("grades") // Ignora la lista para evitar recursión
     private Student student;
 
+
     @ManyToOne
-    @JoinColumn(name = "id_subject", nullable = false)
+    @JoinColumn(name = "id_subject", nullable = true)
     private Subject subject;
 
-    @Column(nullable = false)
-    private Double score;
+    public Double getGrade() {
+        return grade;
+    }
 
-    @Column(name = "evaluation_date", nullable = false)
+    public void setGrade(Double grade) {
+        this.grade = grade;
+    }
+
+    @Column(nullable = true)
+    private Double grade;
+
+    @Column(name = "evaluation_date", nullable = true)
     private LocalDate evaluationDate;
 
-    public Grade (){
-
-    }
+    public Grade (){}
 
     public Grade (Integer id, Student student, Subject subject, Double score, LocalDate evaluationDate){
         this.id = id;
         this.student = student;
         this.subject = subject;
-        this.score = score;
+        this.grade = score;
         this.evaluationDate = evaluationDate;
     }
 
@@ -60,10 +70,10 @@ public class Grade {
     }
 
     public Double getScore() {
-        return score;
+        return grade;
     }
     public void setScore(Double score) {
-        this.score = score;
+        this.grade = score;
     }
 
     public LocalDate getEvaluationDate() {

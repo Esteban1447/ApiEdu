@@ -10,8 +10,69 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/grades")
 public class GradeController {
+
     @Autowired
-    GradeService service;
+    private GradeService service;
+
+    @GetMapping
+    public ResponseEntity<?> getGrades(
+            @RequestParam(required = false) Integer subjectCourseId,
+            @RequestParam(required = false) Integer subjectId
+    ) {
+        try {
+            if (subjectId != null) {
+                return ResponseEntity.ok(service.searchGradesBySubjectId(subjectId));
+            } else if (subjectCourseId != null) {
+                return ResponseEntity.ok(service.searchBySubjectCourseId(subjectCourseId));
+            } else {
+                return ResponseEntity.ok(service.searchAllGrades());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/student/{userId}")
+    public ResponseEntity<?> searchByStudentUserId(@PathVariable Integer userId) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(service.searchByStudentUserId(userId));
+        } catch (Exception errorAPI) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorAPI.getMessage());
+        }
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> searchByStudentAndSubject(
+            @RequestParam Integer studentId,
+            @RequestParam Integer subjectId
+    ) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(service.searchByStudentAndSubject(studentId, subjectId));
+        } catch (Exception errorAPI) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorAPI.getMessage());
+        }
+    }
+
+    @GetMapping("/by-subject")
+    public ResponseEntity<?> searchBySubjectId(@RequestParam Integer id) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(this.service.searchGradesBySubjectId(id));
+        } catch (Exception errorAPI) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorAPI.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Grade gradeData) {
@@ -25,6 +86,7 @@ public class GradeController {
                     .body(errorAPI.getMessage());
         }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> modify(@PathVariable Integer id, @RequestBody Grade data) {
         try {
@@ -37,6 +99,7 @@ public class GradeController {
                     .body(errorAPI.getMessage());
         }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> searchById(@PathVariable Integer id) {
         try {
@@ -49,18 +112,7 @@ public class GradeController {
                     .body(errorAPI.getMessage());
         }
     }
-    @GetMapping
-    public ResponseEntity<?> searchAll() {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(this.service.searchAllGrades());
-        } catch (Exception errorAPI) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(errorAPI.getMessage());
-        }
-    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {

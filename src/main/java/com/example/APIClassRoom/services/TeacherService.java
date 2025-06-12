@@ -1,8 +1,8 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.Teacher;
-import com.example.APIClassRoom.repositories.ITeacherRepository;
+import com.example.APIClassRoom.repositories.ITeacherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,12 @@ import java.util.Optional;
 @Service
 public class TeacherService {
     @Autowired
-    ITeacherRepository repository;
+    ITeacherRepo repository;
+
+    public List<Teacher> searchByCourseId(Integer courseId) {
+        return repository.findByCoursesId(courseId);
+    }
+
 
     public Teacher saveTeacher(Teacher teacherData)throws Exception{
         try{
@@ -30,7 +35,7 @@ public class TeacherService {
                 searchedTeacher.get().setSpeciality(teacherData.getSpeciality());//Modificando un dato viejo
                 return this.repository.save(searchedTeacher.get());
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_TEACHER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_TEACHER.getTexto());
             }
         }catch(Exception error){
             throw new Exception(error.getMessage());
@@ -43,7 +48,7 @@ public class TeacherService {
             if(searchedTeacherForMe.isPresent()){
                 return searchedTeacherForMe.get();
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_TEACHER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_TEACHER.getTexto());
             }
         }catch(Exception error){
             throw new Exception(error.getMessage());
@@ -65,11 +70,19 @@ public class TeacherService {
                 this.repository.deleteById(id);
                 return true;
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_TEACHER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_TEACHER.getTexto());
             }
 
         }catch (Exception error){
             throw new Exception(error.getMessage());
+        }
+    }
+    public Teacher searchByUserId(Integer userId) throws Exception {
+        try {
+            return this.repository.findByUserId(userId)
+                    .orElseThrow(() -> new Exception("Teacher no encontrado con userId: " + userId));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 }

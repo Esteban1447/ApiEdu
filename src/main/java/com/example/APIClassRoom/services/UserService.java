@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.User;
 import com.example.APIClassRoom.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class UserService {
                 searchedUser.get().setUserType(userData.getUserType());
                 return this.repository.save(searchedUser.get());
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_USER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_USER.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -46,7 +46,7 @@ public class UserService {
             if (searchedUser.isPresent()) {
                 return searchedUser.get();
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_USER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_USER.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -68,10 +68,16 @@ public class UserService {
                 this.repository.deleteById(id);
                 return true;
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_USER.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_USER.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
     }
+    public Optional<User> searchByEmailAndPassword(String email, String password) {
+        return repository.findByEmailAndPassword(email, password);
+    }
+
 }
+
+

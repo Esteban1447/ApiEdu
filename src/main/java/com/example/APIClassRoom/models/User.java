@@ -26,13 +26,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference(value = "teacher-user")
     private Teacher teacher;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference(value = "student-user")
     private Student student;
+
 
     public User() {
     }

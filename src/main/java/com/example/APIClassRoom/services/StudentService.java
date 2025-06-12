@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.Student;
 import com.example.APIClassRoom.repositories.IStudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     IStudentRepo repository;
+
+
 
     public Student saveStudent(Student studentData)throws Exception{
         try{
@@ -30,7 +32,7 @@ public class StudentService {
                 searchedStudent.get().setGrade(studentData.getGrade());
                 return this.repository.save(searchedStudent.get());
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_STUDENT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_STUDENT.getTexto());
             }
         }catch(Exception error){
             throw new Exception(error.getMessage());
@@ -43,7 +45,7 @@ public class StudentService {
             if(searchedStudentForMe.isPresent()){
                 return searchedStudentForMe.get();
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_STUDENT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_STUDENT.getTexto());
             }
         }catch(Exception error){
             throw new Exception(error.getMessage());
@@ -65,7 +67,7 @@ public class StudentService {
                 this.repository.deleteById(id);
                 return true;
             }else{
-                throw new Exception(AppiMSG.DONT_FOUND_STUDENT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_STUDENT.getTexto());
             }
 
         }catch (Exception error){

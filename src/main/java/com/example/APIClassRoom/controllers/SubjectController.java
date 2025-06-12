@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
+
     @Autowired
     SubjectService service;
 
@@ -23,6 +24,19 @@ public class SubjectController {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorAPI.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getSubjects(@RequestParam(required = false) Integer courseId) {
+        try {
+            if (courseId != null) {
+                return ResponseEntity.ok(service.getSubjectsByCourseId(courseId));
+            } else {
+                return ResponseEntity.ok(service.getAllSubjects());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -45,19 +59,6 @@ public class SubjectController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(this.service.searchSubjectById(id));
-        } catch (Exception errorAPI) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(errorAPI.getMessage());
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity<?> searchAll() {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(this.service.searchAllSubjects());
         } catch (Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

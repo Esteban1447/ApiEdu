@@ -1,6 +1,9 @@
 package com.example.APIClassRoom.controllers;
 
+import java.util.Map;
+import java.util.Optional;
 import com.example.APIClassRoom.models.User;
+import com.example.APIClassRoom.repositories.IUserRepository;
 import com.example.APIClassRoom.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ public class UserController {
 
     @Autowired
     UserService service;
+    IUserRepository repository;
 
     @PostMapping()
     public ResponseEntity<?> save(@RequestBody User userData) {
@@ -74,4 +78,24 @@ public class UserController {
                     .body(errorAPI.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        try {
+            String email = credentials.get("email");
+            String password = credentials.get("password");
+
+            Optional<User> user = service.searchByEmailAndPassword(email, password);
+
+            if (user.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(user.get());
+            } else {
+                throw new Exception("Credenciales inválidas");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.Attendance;
 import com.example.APIClassRoom.repositories.IAttendanceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class AttendanceService {
                 searched.get().setStatus(attendanceData.getStatus());
                 return this.repository.save(searched.get());
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_ATTENDANCE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_ATTENDANCE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -45,7 +45,7 @@ public class AttendanceService {
             if (searched.isPresent()) {
                 return searched.get();
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_ATTENDANCE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_ATTENDANCE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -67,7 +67,7 @@ public class AttendanceService {
                 this.repository.deleteById(id);
                 return true;
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_ATTENDANCE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_ATTENDANCE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());

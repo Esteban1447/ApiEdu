@@ -4,12 +4,12 @@ package com.example.APIClassRoom.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "inscriptions")
-public class Inscription {
+@Table(name = "tuition")
+public class Tuition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_inscription")
+    @Column(name = "id_tuition")
     private Integer id;
 
     @ManyToOne
@@ -20,12 +20,12 @@ public class Inscription {
     @JoinColumn(name = "id_course", referencedColumnName = "id_course", nullable = false)
     private Course course;
 
-    @Column(name = "inscription_date", nullable = false)
+    @Column(name = "tuition_date", nullable = false)
     private String inscriptionDate;
 
-    public Inscription(){}
+    public Tuition(){}
 
-    public Inscription(Integer id, Student student, Course course, String inscriptionDate) {
+    public Tuition(Integer id, Student student, Course course, String inscriptionDate) {
         this.id = id;
         this.student = student;
         this.course = course;

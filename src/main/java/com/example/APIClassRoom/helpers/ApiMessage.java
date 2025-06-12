@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.helpers;
 
-public enum AppiMSG {
+public enum ApiMessage {
     DONT_FOUND_STUDENT("El estudiante que buscas no se encuentra en BD"),
     DONT_FOUND_COURSE("El curso que buscas no se encuentra en la BD"),
     DONT_FOUND_INSCRIPTION("La inscripcion que buscas no se encuentra en la BD"),
@@ -12,7 +12,7 @@ public enum AppiMSG {
 
     private String texto;
 
-    AppiMSG(String texto) {
+    ApiMessage(String texto) {
         this.texto = texto;
     }
 

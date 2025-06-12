@@ -1,8 +1,10 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.Course;
+import com.example.APIClassRoom.models.Teacher;
 import com.example.APIClassRoom.repositories.ICourseRepo;
+import com.example.APIClassRoom.repositories.ITeacherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,22 @@ public class CourseService {
     @Autowired
     ICourseRepo repository;
 
+    @Autowired
+    ITeacherRepo teacherRepo;
+
+    public List<Course> getCoursesByTeacherId(Integer teacherId) {
+        return repository.findByTeacherId(teacherId);
+    }
+
     public Course saveCourse(Course courseData) throws Exception {
         try {
+            // Validar y asignar profesor si se pasa un ID
+            if (courseData.getTeacher() != null && courseData.getTeacher().getId() != null) {
+                Teacher teacher = teacherRepo.findById(courseData.getTeacher().getId())
+                        .orElseThrow(() -> new Exception("Profesor no encontrado con id " + courseData.getTeacher().getId()));
+                courseData.setTeacher(teacher);
+            }
+
             return this.repository.save(courseData);
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -27,10 +43,21 @@ public class CourseService {
         try {
             Optional<Course> searchedCourse = this.repository.findById(id);
             if (searchedCourse.isPresent()) {
-                searchedCourse.get().setName(courseData.getName());
-                return this.repository.save(searchedCourse.get());
+                Course course = searchedCourse.get();
+
+                // Actualizar nombre
+                course.setName(courseData.getName());
+
+                // Actualizar profesor si viene en el JSON
+                if (courseData.getTeacher() != null && courseData.getTeacher().getId() != null) {
+                    Teacher teacher = teacherRepo.findById(courseData.getTeacher().getId())
+                            .orElseThrow(() -> new Exception("Profesor no encontrado con id " + courseData.getTeacher().getId()));
+                    course.setTeacher(teacher);
+                }
+
+                return this.repository.save(course);
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_COURSE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_COURSE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -43,7 +70,7 @@ public class CourseService {
             if (searchedCourse.isPresent()) {
                 return searchedCourse.get();
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_COURSE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_COURSE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -65,11 +92,10 @@ public class CourseService {
                 this.repository.deleteById(id);
                 return true;
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_COURSE.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_COURSE.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
     }
 }
-

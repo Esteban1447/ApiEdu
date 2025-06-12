@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.services;
 
-import com.example.APIClassRoom.helpers.AppiMSG;
+import com.example.APIClassRoom.helpers.ApiMessage;
 import com.example.APIClassRoom.models.Subject;
 import com.example.APIClassRoom.repositories.ISubjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,14 @@ public class SubjectService {
 
     @Autowired
     ISubjectRepo repository;
+
+    public List<Subject> getAllSubjects() {
+        return repository.findAll();
+    }
+    public List<Subject> getSubjectsByCourseId(Integer courseId) {
+        return repository.findByCourseId(courseId);
+    }
+
 
     public Subject saveSubject(Subject subjectData) throws Exception {
         try {
@@ -31,7 +39,7 @@ public class SubjectService {
                 searchedSubject.get().setCourse(subjectData.getCourse());
                 return this.repository.save(searchedSubject.get());
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_SUBJECT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_SUBJECT.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -44,7 +52,7 @@ public class SubjectService {
             if (searched.isPresent()) {
                 return searched.get();
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_SUBJECT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_SUBJECT.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -66,7 +74,7 @@ public class SubjectService {
                 this.repository.deleteById(id);
                 return true;
             } else {
-                throw new Exception(AppiMSG.DONT_FOUND_SUBJECT.getTexto());
+                throw new Exception(ApiMessage.DONT_FOUND_SUBJECT.getTexto());
             }
         } catch (Exception error) {
             throw new Exception(error.getMessage());

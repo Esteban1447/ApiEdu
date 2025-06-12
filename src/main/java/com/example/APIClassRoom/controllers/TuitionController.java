@@ -1,6 +1,6 @@
 package com.example.APIClassRoom.controllers;
 
-import com.example.APIClassRoom.models.Inscription;
+import com.example.APIClassRoom.models.Tuition;
 import com.example.APIClassRoom.services.TuitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,18 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/inscriptions")
-public class InscriptionController {
+@RequestMapping("/tuitions")
+public class TuitionController {
 
     @Autowired
     TuitionService service;
 
     @PostMapping()
-    public ResponseEntity<?> save(@RequestBody Inscription inscriptionData) {
+    public ResponseEntity<?> save(@RequestBody Tuition tuitionData) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(this.service.saveInscription(inscriptionData));
+                    .body(this.service.saveInscription(tuitionData));
         } catch(Exception errorAPI) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -28,7 +28,7 @@ public class InscriptionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity modify(@PathVariable Integer id, @RequestBody Inscription data) {
+    public ResponseEntity modify(@PathVariable Integer id, @RequestBody Tuition data) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
