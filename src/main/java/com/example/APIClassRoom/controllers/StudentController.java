@@ -14,6 +14,22 @@ public class StudentController {
     @Autowired
     StudentService service;
 
+
+
+    @GetMapping
+    public ResponseEntity<?> getStudents(@RequestParam(required = false) Integer userId) {
+        try {
+            if (userId != null) {
+                return ResponseEntity.ok(service.searchByUserId(userId));
+            } else {
+                return ResponseEntity.ok(service.searchAllStudents());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PostMapping()
     public ResponseEntity<?> save(@RequestBody Student studentData) {
         try {
@@ -50,18 +66,7 @@ public class StudentController {
                     .body(errorAPI.getMessage());
         }
     }
-    @GetMapping()
-    public ResponseEntity<?> searchAll() {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(this.service.searchAllStudents());
-        } catch(Exception errorAPI) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(errorAPI.getMessage());
-        }
-    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {

@@ -16,11 +16,14 @@ public class GradeController {
 
     @GetMapping
     public ResponseEntity<?> getGrades(
-            @RequestParam(required = false) Integer subjectCourseId,
-            @RequestParam(required = false) Integer subjectId
+            @RequestParam(required = false) Integer studentId,
+            @RequestParam(required = false) Integer subjectId,
+            @RequestParam(required = false) Integer subjectCourseId
     ) {
         try {
-            if (subjectId != null) {
+            if (studentId != null) {
+                return ResponseEntity.ok(service.getGradesByStudentId(studentId));
+            } else if (subjectId != null) {
                 return ResponseEntity.ok(service.searchGradesBySubjectId(subjectId));
             } else if (subjectCourseId != null) {
                 return ResponseEntity.ok(service.searchBySubjectCourseId(subjectCourseId));

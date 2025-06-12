@@ -19,7 +19,6 @@ public class Grade {
     @JsonIgnoreProperties("grades") // Ignora la lista para evitar recursión
     private Student student;
 
-
     @ManyToOne
     @JoinColumn(name = "id_subject", nullable = true)
     private Subject subject;

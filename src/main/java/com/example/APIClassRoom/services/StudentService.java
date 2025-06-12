@@ -14,6 +14,10 @@ public class StudentService {
     @Autowired
     IStudentRepo repository;
 
+    public Student searchByUserId(Integer userId) {
+        return repository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("No se encontró un estudiante con ese userId"));
+    }
 
 
     public Student saveStudent(Student studentData)throws Exception{

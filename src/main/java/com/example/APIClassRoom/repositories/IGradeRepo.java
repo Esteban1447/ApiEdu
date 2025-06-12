@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface IGradeRepo extends JpaRepository<Grade, Integer> {
 
+    List<Grade> findByStudentId(Integer studentId);
+
     List<Grade> findBySubjectId(Integer subjectId);
 
     List<Grade> findByStudentIdAndSubjectId(Integer studentId, Integer subjectId);

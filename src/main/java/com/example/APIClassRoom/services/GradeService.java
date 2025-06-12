@@ -91,5 +91,9 @@ public class GradeService {
             throw new Exception(error.getMessage());
         }
     }
+    public List<Grade> getGradesByStudentId(Integer studentId) {
+        return repository.findByStudentId(studentId);
+    }
+
 
 }
